@@ -1,5 +1,8 @@
 from agent.reasoning import get_ai_response
 from agent.tools import execute_tool
+from services.tts import (
+    speak_text
+)
 from services.stt import (
     speech_to_text
 )
@@ -51,6 +54,10 @@ final_response = generate_response(
 print("\nFINAL VOICE RESPONSE:\n")
 
 print(final_response)
+
+speak_text(
+    final_response
+)
 
 save_patient_memory(
     ai_response["patient_name"],
