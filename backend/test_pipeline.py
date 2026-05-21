@@ -1,5 +1,12 @@
 from agent.reasoning import get_ai_response
 from agent.tools import execute_tool
+from services.language_detector import (
+    detect_language
+)
+
+from services.response_generator import (
+    generate_response
+)
 from memory.session_memory import (
     save_session_memory
 )
@@ -9,11 +16,14 @@ from memory.persistent_memory import (
 )
 
 user_message = """
-I want to book an appointment
-with a cardiologist
-at 10:00 AM.
-My name is Bhavana.
+मुझे हृदय रोग विशेषज्ञ के साथ
+10:00 AM पर अपॉइंटमेंट चाहिए।
+मेरा नाम भवाना है।
 """
+
+language = detect_language(
+    user_message
+)
 
 # STEP 1: AI REASONING
 ai_response = get_ai_response(
@@ -32,6 +42,16 @@ print(ai_response)
 tool_response = execute_tool(
     ai_response
 )
+
+final_response = generate_response(
+    language,
+    tool_response
+)
+
+print("\nFINAL VOICE RESPONSE:\n")
+
+print(final_response)
+
 save_patient_memory(
     ai_response["patient_name"],
     {
