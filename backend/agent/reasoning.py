@@ -56,12 +56,19 @@ def get_ai_response(user_message):
             response["doctor_type"] = doctor
 
     # Detect Time Slot
-    slot_pattern = r"\d{1,2}:\d{2}\s?(AM|PM|am|pm)"
+    slot_pattern = r"\d{1,2}:\d{2}\s?(AM|PM|am|pm|a\.m\.|p\.m\.)"
 
     slot_match = re.search(slot_pattern, user_message)
 
     if slot_match:
         response["slot"] = slot_match.group()
+
+        response["slot"] = (
+        response["slot"]
+        .replace("a.m.", "AM")
+        .replace("p.m.", "PM")
+    )
+
 
     # Detect Patient Name
     name_patterns = [

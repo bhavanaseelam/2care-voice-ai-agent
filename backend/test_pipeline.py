@@ -1,5 +1,9 @@
 from agent.reasoning import get_ai_response
 from agent.tools import execute_tool
+from services.stt import (
+    speech_to_text
+)
+
 from services.language_detector import (
     detect_language
 )
@@ -15,11 +19,7 @@ from memory.persistent_memory import (
     save_patient_memory
 )
 
-user_message = """
-मुझे हृदय रोग विशेषज्ञ के साथ
-10:00 AM पर अपॉइंटमेंट चाहिए।
-मेरा नाम भवाना है।
-"""
+user_message = speech_to_text()
 
 language = detect_language(
     user_message
