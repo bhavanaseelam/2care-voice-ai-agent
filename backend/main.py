@@ -1,5 +1,11 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
+from services.latency_logger import (
+    start_timer,
+    end_timer
+)
 
 from agent.reasoning import (
     get_ai_response
@@ -32,6 +38,18 @@ from services.tts import (
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+
+    allow_origins=["*"],
+
+    allow_credentials=True,
+
+    allow_methods=["*"],
+
+    allow_headers=["*"],
+)
+
 
 # REQUEST MODEL
 
@@ -52,6 +70,8 @@ def home():
 
 @app.post("/voice-agent")
 def voice_agent(request: VoiceRequest):
+
+    timer = start_timer()
 
     user_message = request.message
 
@@ -91,11 +111,18 @@ def voice_agent(request: VoiceRequest):
         }
     )
 
+    latency = end_timer(timer)
+
+    print("\nAPI LATENCY:\n")
+
+    print(f"{latency} seconds")
+
     return {
         "language": language,
         "ai_response": ai_response,
         "tool_response": tool_response,
-        "final_response": final_response
+        "final_response": final_response,
+        "latency_seconds": latency
     }
 
 
