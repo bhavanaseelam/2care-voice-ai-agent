@@ -1,5 +1,7 @@
 from scheduler.mock_data import doctors_data
 
+appointments = []
+
 # Stores booked appointments
 booked_appointments = []
 
@@ -68,6 +70,8 @@ def book_appointment(patient_name, doctor_type, slot):
     }
 
     booked_appointments.append(appointment)
+
+    appointments.append(appointment)
 
     return {
         "status": "success",
